@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" style="integrity:'sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6'" crossorigin="anonymous">
+        <link href="css/articulos.css" rel="stylesheet">
+        <script src  ="js/jquery-3.2.1.js"></script>
+		<script src= "js/script.js" ></script>
+        <script src="jquery.js"></script>
+        <title>Tienda</title>
+    </head>
+    <body class="bg-secondary">
+        <nav class="navbar navbar-dark bg-dark"></nav>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img th:src="@{/img/logo.png}" alt="" width="30" height="30">
+                    Tienda
+                </a>
+                <div>
+                    <!--
+                        faltaría que solo salga un boton, depende de si se esta registrado o no, y de si es admin o no
+                        <form th:if="${usuario == null}" th:action="@{/usuarios/login}"></form>
+                    -->
+                    <a th:href='@{/articulos/crear}' class='btn btn-outline-success' style="border-color:grey; color:grey; background-color: gainsboro;">Añadir Articulo ✚</a>
+                    <a th:href='@{/usuarios/registrar}' style="border-color:grey; color:grey; background-color: gainsboro;" class='btn btn-outline-success'>Iniciar Sesión | Registrarse</a>
+                </div>
+                
+                <form th:action="@{/buscar}" class="d-flex">
+                    <input autofocus="autofocus" name="q" class="form-control me-2" style="border-color:grey;" type="search" th:placeholder="${param.q}" aria-label="Search">
+                    <button class="btn btn-outline-success" style="border-color:grey; color:grey; background-color: gainsboro;" type="submit">Buscar</button>
+                </form>
+            </div>
+        </nav>
+        <nav class="navbar navbar-dark bg-dark"></nav>
+		<nav class="navbar navbar-white bg-white">
+            <div class="container-fluid">
+            	<a class="navbar-brand">
+                    Filtrado por categorías 
+                    <!--        FILTRADO CON SELECTOR -- No funciona el enlace al filtrado
+                    <select class="form-control">
+                        <option th:href='@{/}'>Sin Filtrado </option>
+                        <option th:href='@{/filtrar/{q}(q=Comida)}'>Comida</option> 
+                        <option th:href='@{/filtrar/{q}(q=Mobiliario)}'>Mobiliario</option> 
+                        <option th:href='@{/filtrar/{q}(q=Limpieza)}'>Limpieza</option> 
+                        <option th:href='@{/filtrar/{q}(q=Otros)}'>Otros</option> 
+                    </select>-->
+                </a>
+                
+                <a th:href='@{/}' class="btn btn-primary" style="background-color: transparent; color:dodgerblue">Quitar filtro</a>
+                <a th:href='@{/filtrar/{q}(q=Comida)}' class="btn btn-primary">Comida</a>
+                <a th:href='@{/filtrar/{q}(q=Mobiliario)}' class="btn btn-primary">Mobiliario</a>
+                <a th:href='@{/filtrar/{q}(q=Limpieza)}' class="btn btn-primary">Limpieza</a>
+                <a th:href='@{/filtrar/{q}(q=Otros)}' class="btn btn-primary">Otros</a>
+                <!--<div class="options-section">
+                <div class="content">
+                        <form action="" method="post">
+                            <input id="rating-asc white" name="rating-asc" type="radio" > Mostrar de forma ascendente</input></br>
+                            <input id="rating-asc" name="rating-asc" type="radio"> Mostrar de forma descendente</input></br>
+                        </form>
+                    </div>
+                </div>-->
+            </div>
+        </nav>
+		
+        <div class='container mt-4 vj-destacados'>
+            <div class='row'>
+                <div th:each="articulo : ${listado}" class='col-md-3 mb-4'>
+                    <div th:unless="${articulo.second}" class="card">
+                        <div class="card-body">
+                            <p>
+                            <div style"width:100%" align=center>
+                                <img th:src="${articulo.first.imagen}" width="100%" height="100%">
+                            </div>
+                        </p>
+                        <h5 th:text="${articulo.first.nombre}" class="card-title text-center"></h5>
+                            <p th:text="${articulo.first.precio}" class="card-text"></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a th:href='@{/detalles/{q}(q=${articulo.first.id})}' class="btn btn-primary vj-cent">Ver detalles</a>
+                        </div>
+                    </div>
+                    <div th:if="${articulo.second}" class="card recommended">
+                        <div class="card-body">
+                            <p>
+                                <div style"width:100%" align=center>
+                                    <img th:src="${articulo.first.imagen}" width="100%" height="100%">
+                                </div>
+                            </p>
+                            <h5 th:text="${articulo.first.nombre}" class="card-title text-center"></h5>
+                            <p th:text="${articulo.first.precio}" class="card-text"></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <a th:href='@{/detalles/{q}(q=${articulo.first.id})}' class="btn btn-primary vj-cent">Ver detalles</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript; choose one of the two! -->
+
+        <!-- Option 1: Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" style="integrity:'sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf'" crossorigin="anonymous"></script>
+		
+        <!-- Option 2: Separate Popper and Bootstrap JS -->
+        <!--
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+        -->
+    </body>
+</html>
